@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Geocoding Studio & Cybersecurity Hub - IESTP Hermanos Cárcamo</title>
+  <meta name="description" content="Simulador de Geocodificación y Módulo de Ciberseguridad con Ofuscador en Tiempo de Ejecución - IESTP Hermanos Cárcamo.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Leaflet CSS for 2D Map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="dark-theme">
+
+  <!-- Header Bar -->
+  <header class="app-header">
+    <div class="brand">
+      <div class="logo-badge">
+        <i class="fa-solid fa-shield-halved spinning-globe-icon"></i>
+      </div>
+      <div class="brand-text">
+        <h1>GEOCODING &amp; <span>CYBER STUDIO</span></h1>
+        <p>IESTP Hermanos Cárcamo - Paita | Base de Datos &amp; Ciberseguridad</p>
+      </div>
+    </div>
+
+    <!-- Main Module Switchers -->
+    <div class="module-switcher-group">
+      <button id="btn-module-geo" class="btn-module active" title="Modulo de Geocodificación Espacial">
+        <i class="fa-solid fa-map-location-dot"></i> 1. Geocodificación Espacial
+      </button>
+      <button id="btn-module-cyber" class="btn-module" title="Módulo de Ciberseguridad y Ofuscación">
+        <i class="fa-solid fa-user-shield"></i> 2. Ciberseguridad &amp; Ofuscación
+      </button>
+    </div>
+
+    <!-- Header Actions -->
+    <div class="header-actions">
+      <div class="view-toggle-group id-geo-only">
+        <button id="btn-view-2d" class="btn-toggle active" title="Mapa 2D Satelital HD Claro">
+          <i class="fa-solid fa-satellite"></i> Satélite HD 2D
+        </button>
+        <button id="btn-view-3d" class="btn-toggle" title="Globo Terráqueo 3D">
+          <i class="fa-solid fa-globe"></i> Globo 3D
+        </button>
+      </div>
+
+      <button id="btn-sound-toggle" class="btn-icon" title="Efectos de Sonido (On/Off)">
+        <i class="fa-solid fa-volume-high"></i>
+      </button>
+
+      <button id="btn-info-modal" class="btn-icon btn-accent" title="Ver Guía Teórica de la Diapositiva">
+        <i class="fa-solid fa-book-open"></i> Guía Teórica
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Grid Layout -->
+  <main class="app-container">
+
+    <!-- Left Column Sidebar -->
+    <aside class="sidebar-panel">
+
+      <!-- ==================== MODULE 1: GEOCODING SIDEBAR ==================== -->
+      <div id="sidebar-geo-module" class="sidebar-module-container active-module">
+        <!-- Type Switcher Tabs -->
+        <div class="geocoding-mode-tabs">
+          <button id="tab-direct" class="tab-btn active" data-type="direct">
+            <i class="fa-solid fa-arrow-right-to-city"></i> Directa (Texto &rarr; Coords)
+          </button>
+          <button id="tab-inverse" class="tab-btn" data-type="inverse">
+            <i class="fa-solid fa-location-crosshairs"></i> Inversa (Coords &rarr; Texto)
+          </button>
+        </div>
+
+        <!-- Quick Preset Cards -->
+        <section class="section-presets">
+          <h3><i class="fa-solid fa-star text-gold"></i> Ejemplos Oficiales de la Tarea</h3>
+          <div class="preset-cards-grid">
+            
+            <div class="preset-card active" data-preset="1">
+              <div class="preset-badge">Ejemplo 1 (Directa)</div>
+              <div class="preset-title">Plaza de Armas de Paita</div>
+              <div class="preset-desc">Búsqueda por lugar turístico</div>
+              <div class="preset-tag"><i class="fa-solid fa-location-dot"></i> Paita, Piura</div>
+            </div>
+
+            <div class="preset-card" data-preset="2">
+              <div class="preset-badge">Ejemplo 2 (Directa)</div>
+              <div class="preset-title">IESTP Hermanos Cárcamo</div>
+              <div class="preset-desc">Ubicación del Instituto</div>
+              <div class="preset-tag"><i class="fa-solid fa-building-columns"></i> Paita Alta, Piura</div>
+            </div>
+
+            <div class="preset-card" data-preset="3">
+              <div class="preset-badge">Ejemplo 3 (Inversa)</div>
+              <div class="preset-title">Rastreo GPS Óvalo Grau</div>
+              <div class="preset-desc">GPS a dirección postal</div>
+              <div class="preset-tag"><i class="fa-solid fa-mobile-screen-button"></i> Óvalo Grau, Piura</div>
+            </div>
+
+            <div class="preset-card" data-preset="4">
+              <div class="preset-badge">Ejemplo 4 (Inversa)</div>
+              <div class="preset-title">Miraflores &amp; Costa Verde</div>
+              <div class="preset-desc">Rastreo Courier en Lima</div>
+              <div class="preset-tag"><i class="fa-solid fa-water"></i> Miraflores, Lima</div>
+            </div>
+
+            <div class="preset-card" data-preset="5">
+              <div class="preset-badge">Ejemplo 5 (Directa)</div>
+              <div class="preset-title">Plaza San Martín - Lima</div>
+              <div class="preset-desc">Centro Histórico de Lima</div>
+              <div class="preset-tag"><i class="fa-solid fa-landmark"></i> Cercado de Lima</div>
+            </div>
+
+            <div class="preset-card" data-preset="6">
+              <div class="preset-badge">Ejemplo 6 (Directa)</div>
+              <div class="preset-title">Iglesia de la Recoleta</div>
+              <div class="preset-desc">Patrimonio Cultural Lima</div>
+              <div class="preset-tag"><i class="fa-solid fa-church"></i> Lima Centro</div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- Custom Input Search Form -->
+        <section class="section-search">
+          <label for="input-query" id="label-query"><i class="fa-solid fa-magnifying-glass"></i> Dirección o Coordenadas Custom:</label>
+          <div class="search-input-wrapper">
+            <input type="text" id="input-query" placeholder="Ej: Plaza de Armas de Paita, Piura" value="Plaza de Armas de Paita, Piura">
+            <button id="btn-run-simulation" class="btn-primary">
+              <i class="fa-solid fa-play"></i> Procesar
+            </button>
+          </div>
+          <small class="search-tip" id="search-tip">💡 Tip: Haz clic en el mapa satelital para geocodificar cualquier calle de Perú.</small>
+        </section>
+
+        <!-- Dynamic 5-Step Process Visualizer -->
+        <section class="section-pipeline">
+          <div class="pipeline-header">
+            <h3><i class="fa-solid fa-gears text-cyan"></i> Flujo de Geocodificación (5 Pasos)</h3>
+            <span id="pipeline-status-tag" class="status-tag tag-ready">Listo</span>
+          </div>
+
+          <div class="steps-flow-container">
+            <div class="step-card" id="step-1">
+              <div class="step-icon-wrapper"><i class="fa-solid fa-keyboard"></i></div>
+              <div class="step-content">
+                <div class="step-title-row"><span class="step-num">Paso 1</span><span class="step-name">Ingreso</span></div>
+                <p class="step-desc">El usuario introduce el texto o coordenada en la interfaz.</p>
+                <div class="step-data-box" id="step-1-data">Esperando datos...</div>
+              </div>
+            </div>
+
+            <div class="step-card" id="step-2">
+              <div class="step-icon-wrapper"><i class="fa-solid fa-database"></i></div>
+              <div class="step-content">
+                <div class="step-title-row"><span class="step-num">Paso 2</span><span class="step-name">Consulta</span></div>
+                <p class="step-desc">El sistema busca la información dentro de su Base de Datos Espacial.</p>
+                <div class="step-data-box" id="step-2-data">Índice espacial R-Tree / PostGIS ready</div>
+              </div>
+            </div>
+
+            <div class="step-card" id="step-3">
+              <div class="step-icon-wrapper"><i class="fa-solid fa-street-view"></i></div>
+              <div class="step-content">
+                <div class="step-title-row"><span class="step-num">Paso 3</span><span class="step-name">Coincidencia</span></div>
+                <p class="step-desc">Algoritmo encuentra el registro que hace "match" o coincidencia.</p>
+                <div class="step-data-box" id="step-3-data">Score de coincidencia: --</div>
+              </div>
+            </div>
+
+            <div class="step-card" id="step-4">
+              <div class="step-icon-wrapper"><i class="fa-solid fa-compass"></i></div>
+              <div class="step-content">
+                <div class="step-title-row"><span class="step-num">Paso 4</span><span class="step-name">Geocodificación</span></div>
+                <p class="step-desc">Se asignan o leen las coordenadas exactas (Latitud y Longitud).</p>
+                <div class="step-data-box" id="step-4-data">EPSG:4326 (WGS84) Lat/Lng</div>
+              </div>
+            </div>
+
+            <div class="step-card" id="step-5">
+              <div class="step-icon-wrapper"><i class="fa-solid fa-map-location-dot"></i></div>
+              <div class="step-content">
+                <div class="step-title-row"><span class="step-num">Paso 5</span><span class="step-name">Visualización</span></div>
+                <p class="step-desc">El punto se dibuja y muestra sobre el mapa dinámico.</p>
+                <div class="step-data-box" id="step-5-data">Renderizado completado</div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- ==================== MODULE 2: CYBERSECURITY SIDEBAR ==================== -->
+      <div id="sidebar-cyber-module" class="sidebar-module-container">
+        
+        <!-- Live Code Obfuscator & Encoder Tool -->
+        <section class="cyber-obfuscator-panel">
+          <div class="cyber-title-header">
+            <h3><i class="fa-solid fa-user-secret text-gold"></i> Ofuscador &amp; Codificador</h3>
+            <span class="status-tag tag-ready">Runtime Simulator</span>
+          </div>
+          <p class="section-desc-text">Ofusca scripts de ciberseguridad en tiempo de ejecución para evitar ingeniería inversa ("para que no se vea el código fuente").</p>
+          
+          <div class="form-group">
+            <label for="cyber-code-input"><i class="fa-solid fa-code text-cyan"></i> Código Fuente a Ofuscar:</label>
+            <textarea id="cyber-code-input" placeholder="Escribe o pega tu código aquí... (Ej: print('Inyección SQL detectada'))"># Script Hacking Detect
+import socket
+
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.connect(("192.168.1.1", 80))
+print("Conexión de red establecida.")</textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="cyber-obfuscate-type"><i class="fa-solid fa-key text-purple"></i> Algoritmo / Tipo de Cifrado:</label>
+            <select id="cyber-obfuscate-type">
+              <option value="base64">Codificación Base64 (Standard)</option>
+              <option value="hex">Cadena Hexadecimal (Raw Hex)</option>
+              <option value="rot13">Cifrado ROT13 (Desplazamiento Alfabeto)</option>
+              <option value="custom-eval">Ofuscación Ofuscada Eval() [Runtime Execute]</option>
+            </select>
+          </div>
+
+          <div class="cyber-action-row">
+            <button id="btn-cyber-obfuscate" class="btn-primary flex-fill">
+              <i class="fa-solid fa-lock"></i> Ofuscar Código
+            </button>
+            <button id="btn-cyber-decode" class="btn-icon" title="Restaurar / Desofuscar Código">
+              <i class="fa-solid fa-unlock-keyhole text-green"></i> Desofuscar
+            </button>
+          </div>
+
+          <div class="form-group margin-top-md">
+            <div class="output-label-row">
+              <label for="cyber-code-output"><i class="fa-solid fa-terminal text-gold"></i> Resultado de Ofuscación:</label>
+              <button id="btn-copy-output" class="btn-link" title="Copiar al portapapeles"><i class="fa-solid fa-copy"></i> Copiar</button>
+            </div>
+            <textarea id="cyber-code-output" readonly placeholder="El código ofuscado aparecerá aquí en tiempo de ejecución..."></textarea>
+          </div>
+        </section>
+
+        <!-- Quick Info block -->
+        <section class="cyber-sidebar-info">
+          <div class="info-alert-box">
+            <i class="fa-solid fa-triangle-exclamation text-gold"></i>
+            <span><strong>Definición Técnica:</strong> La ofuscación convierte el código fuente comprensible en un formato ilegible para humanos, pero ejecutable para el procesador en tiempo de ejecución.</span>
+          </div>
+        </section>
+
+      </div>
+
+    </aside>
+
+    <!-- Right Column Viewports -->
+    <section class="viewport-panel">
+
+      <!-- ==================== MODULE 1: GEOCODING VIEWPORT ==================== -->
+      <div id="viewport-geo-module" class="viewport-module-container active-module">
+        <!-- 2D Leaflet Map Container -->
+        <div id="leaflet-container" class="map-viewport active-view">
+          <div class="map-tile-switcher">
+            <button id="btn-tile-google" class="tile-btn active" title="Satélite Google Híbrido"><i class="fa-solid fa-earth-americas"></i> Satelital Google</button>
+            <button id="btn-tile-sat" class="tile-btn" title="Satélite HD (Esri World Imagery)"><i class="fa-solid fa-satellite"></i> Satelital Esri</button>
+            <button id="btn-tile-street" class="tile-btn" title="Mapa de Calles Vectorial"><i class="fa-solid fa-road"></i> Callejero</button>
+            <button id="btn-tile-dark" class="tile-btn" title="Modo Oscuro SIG"><i class="fa-solid fa-moon"></i> Dark SIG</button>
+          </div>
+        </div>
+
+        <!-- Globe 3D Container -->
+        <div id="globe-container" class="map-viewport">
+          <div class="globe-overlay-instructions">
+            <span class="pulse-dot"></span>
+            <span><i class="fa-solid fa-earth-americas"></i> Modo Globo 3D | Haz clic en el planeta para geocodificar</span>
+          </div>
+        </div>
+
+        <!-- HUD Telemetry Controls Overlay -->
+        <div class="hud-controls-overlay">
+          <button id="btn-reset-paita" class="hud-btn" title="Ir a Paita (Instituto Hermanos Cárcamo)">
+            <i class="fa-solid fa-anchor text-cyan"></i> Paita
+          </button>
+          <button id="btn-reset-piura" class="hud-btn" title="Ir a Piura (Óvalo Grau)">
+            <i class="fa-solid fa-tree text-gold"></i> Piura
+          </button>
+          <button id="btn-reset-lima" class="hud-btn" title="Ir a Lima (Costa Verde / Centro Histórico)">
+            <i class="fa-solid fa-city text-green"></i> Lima
+          </button>
+          <div class="coordinates-hud">
+            <i class="fa-solid fa-crosshairs text-cyan"></i>
+            <span id="hud-latlng">LAT: -5.0848° | LNG: -81.1132°</span>
+          </div>
+        </div>
+
+        <!-- Location Details Card Overlay -->
+        <div id="location-card" class="location-card">
+          <button id="btn-close-card" class="btn-card-close">&times;</button>
+          <div class="card-image-wrapper">
+            <img id="card-location-img" src="./assets/paita.jpg" alt="Ubicación">
+            <div class="card-image-badge" id="card-type-badge">Geocodificación Directa</div>
+          </div>
+          <div class="card-body">
+            <h2 id="card-title">Plaza de Armas de Paita</h2>
+            <div class="card-subtitle" id="card-subtitle"><i class="fa-solid fa-location-dot"></i> Paita, Piura, Perú</div>
+            <div class="card-stats-grid">
+              <div class="stat-box"><span class="stat-lbl">LATITUD</span><span class="stat-val text-cyan" id="card-lat">-5.0848°</span></div>
+              <div class="stat-box"><span class="stat-lbl">LONGITUD</span><span class="stat-val text-gold" id="card-lng">-81.1132°</span></div>
+              <div class="stat-box"><span class="stat-lbl">TIEMPO PROCESO</span><span class="stat-val text-green" id="card-time">34 ms</span></div>
+              <div class="stat-box"><span class="stat-lbl">MATCH SCORE</span><span class="stat-val text-purple" id="card-score">99.8%</span></div>
+            </div>
+            <div class="card-note" id="card-note">
+              <i class="fa-solid fa-circle-info text-cyan"></i>
+              <span><strong>Resumen para Tarea:</strong> Convierte la dirección física en coordenadas geográficas.</span>
+            </div>
+            <div class="card-actions">
+              <button id="btn-open-gallery" class="btn-card-action">
+                <i class="fa-solid fa-images"></i> Ver Galería de Fotos de Lima / Paita
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== MODULE 2: CYBERSECURITY VIEWPORT ==================== -->
+      <div id="viewport-cyber-module" class="viewport-module-container">
+        
+        <!-- Interactive Cybersecurity Hub -->
+        <div class="cyber-dashboard-panel">
+          <div class="dashboard-header">
+            <h2>Los 8 Lenguajes de Programación en Ciberseguridad</h2>
+            <p>Selecciona un lenguaje para explorar su funcionamiento, aplicaciones prácticas y simular scripts en la consola hacker en tiempo de ejecución.</p>
+          </div>
+
+          <!-- Languages Grid -->
+          <div class="languages-grid" id="cyber-languages-grid">
+            <!-- Language Cards Populated Dynamically by JS -->
+          </div>
+
+          <!-- Live Terminal Simulator (Matrix Terminal Console) -->
+          <div class="live-terminal-panel">
+            <div class="terminal-header-bar">
+              <div class="terminal-circles">
+                <span class="circle-red"></span>
+                <span class="circle-yellow"></span>
+                <span class="circle-green"></span>
+              </div>
+              <div class="terminal-title">SIMULADOR CONSOLA HACKER - IESTP HERMANOS CÁRCAMO</div>
+              <div class="terminal-language-tag" id="terminal-lang-tag">Bash Terminal</div>
+            </div>
+            <div class="terminal-body" id="hacker-terminal-body">
+              <div class="terminal-line"><span class="t-prompt">guest@carcamo_sec:~$</span> welcome_message --cyber</div>
+              <div class="terminal-line text-green">Iniciando simulador de entornos de ciberseguridad... Listo.</div>
+              <div class="terminal-line text-muted">Selecciona un lenguaje de la cuadrícula superior para cargar un script e interactuar con la consola.</div>
+            </div>
+            <div class="terminal-footer">
+              <button id="btn-run-terminal-code" class="btn-terminal-run"><i class="fa-solid fa-play"></i> Ejecutar en Consola</button>
+              <button id="btn-clear-terminal" class="btn-terminal-clear"><i class="fa-solid fa-trash-can"></i> Limpiar</button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Photo Gallery Modal -->
+  <div id="gallery-modal" class="modal-backdrop hidden">
+    <div class="modal-content modal-gallery-content">
+      <div class="modal-header">
+        <h2 id="gallery-modal-title"><i class="fa-solid fa-images text-gold"></i> Galería de Fotos</h2>
+        <button id="btn-close-gallery" class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="gallery-main-container">
+          <img id="gallery-main-img" src="./assets/paita.jpg" alt="Foto Ubicación">
+          <div class="gallery-caption" id="gallery-caption">Foto de la ubicación</div>
+        </div>
+        <div class="gallery-thumbnails" id="gallery-thumbnails">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Theoretical Summary Modal (Based on slide image) -->
+  <div id="theory-modal" class="modal-backdrop hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2><i class="fa-solid fa-graduation-cap text-gold"></i> Fundamentos de Geocodificación &amp; Ciberseguridad</h2>
+        <button id="btn-close-modal" class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        
+        <div class="theory-banner">
+          <p><strong>Curso:</strong> Bases de Datos &amp; Ciberseguridad | <strong>Instituto:</strong> IESTP Hermanos Cárcamo - Paita</p>
+        </div>
+
+        <!-- Geocoding Theory Section -->
+        <h3 class="heading-section"><i class="fa-solid fa-map-location-dot text-cyan"></i> 1. El Proceso de Geocodificación (5 Pasos)</h3>
+        <p class="heading-desc">Secuencia lógica y sistemática que realiza el sistema desde que el usuario ingresa una dirección hasta que se visualiza el punto en el mapa:</p>
+
+        <div class="theory-steps-grid">
+          <div class="t-step">
+            <div class="t-step-num">1</div>
+            <h4>Ingreso</h4>
+            <p>El usuario teclea o introduce una dirección en el sistema.</p>
+          </div>
+          <div class="t-step">
+            <div class="t-step-num">2</div>
+            <h4>Consulta</h4>
+            <p>El sistema busca la información dentro de su base de datos espacial.</p>
+          </div>
+          <div class="t-step">
+            <div class="t-step-num">3</div>
+            <h4>Coincidencia</h4>
+            <p>El sistema encuentra el registro que hace "match" o coincide.</p>
+          </div>
+          <div class="t-step">
+            <div class="t-step-num">4</div>
+            <h4>Geocodificación</h4>
+            <p>Se le asignan las coordenadas exactas (latitud y longitud).</p>
+          </div>
+          <div class="t-step">
+            <div class="t-step-num">5</div>
+            <h4>Visualización</h4>
+            <p>Finalmente, el punto se dibuja y se muestra sobre un mapa.</p>
+          </div>
+        </div>
+
+        <h3 class="heading-section margin-top-md"><i class="fa-solid fa-diagram-project text-purple"></i> 2. Tipos de Geocodificación</h3>
+        <div class="theory-types-grid">
+          <div class="type-box direct">
+            <h4><i class="fa-solid fa-arrow-right-to-city"></i> Geocodificación Directa</h4>
+            <p>Convierte una dirección postal o nombre en coordenadas numéricas GPS.</p>
+            <p class="example-code">Ejemplo: "Instituto Hermanos Cárcamo" &rarr; (-5.0895, -81.1042)</p>
+          </div>
+
+          <div class="type-box inverse">
+            <h4><i class="fa-solid fa-location-crosshairs"></i> Geocodificación Inversa</h4>
+            <p>A partir de unas coordenadas GPS numéricas obtiene la dirección postal o nombre del lugar.</p>
+            <p class="example-code">Ejemplo: (-5.1945, -80.6328) &rarr; Óvalo Grau, Piura</p>
+          </div>
+        </div>
+
+        <!-- Cybersecurity Theory Section -->
+        <h3 class="heading-section margin-top-md"><i class="fa-solid fa-user-shield text-gold"></i> 3. Ciberseguridad &amp; Ofuscación de Código</h3>
+        <div class="type-box direct" style="border-left-color: var(--accent-gold); margin-bottom:12px;">
+          <h4>¿Por qué se ofusca el código en Ciberseguridad?</h4>
+          <p>La ofuscación de código convierte scripts funcionales legibles en códigos encriptados o codificados en base64, hexadecimal o XOR. Esto previene que analistas de malware o ingenieros inversos comprendan la lógica de ataque o protección sin ejecutar la aplicación en un entorno controlado (Sandbox).</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <!-- Globe.gl (Three.js powered 3D globe) -->
+  <script src="https://unpkg.com/globe.gl"></script>
+
+  <!-- Leaflet 2D Map -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+
+  <!-- Custom Application Logic -->
+  <script src="app.js"></script>
+</body>
+</html>
