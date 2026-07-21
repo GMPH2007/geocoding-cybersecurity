@@ -277,6 +277,7 @@ _start:
   let activeView = '2d';
   let activeType = 'direct';
   let activePreset = 1;
+  let activeLocationData = PRESETS[1]; // Track currently displayed location data dynamically
   let activeCyberLang = 'python';
   let soundEnabled = true;
   let isSimulating = false;
@@ -681,6 +682,9 @@ _start:
     const p = PRESETS[presetId];
     if (!p) return;
 
+    // Track active location data dynamically
+    activeLocationData = p;
+
     // Highlight Preset Card
     document.querySelectorAll('.preset-card').forEach(c => c.classList.remove('active'));
     const activeCard = document.querySelector(`.preset-card[data-preset="${presetId}"]`);
@@ -731,6 +735,8 @@ _start:
       note: 'Geocodificación Inversa: Convierte el punto GPS en el espacio digital en una ubicación geográfica.'
     };
 
+    activeLocationData = pipelineData; // update active location
+
     try {
       const resp = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`);
       const data = await resp.json();
@@ -780,6 +786,8 @@ _start:
       note: 'Geocodificación Directa: Transforma el texto ingresado en coordenadas geográficas numéricas.'
     };
 
+    activeLocationData = pipelineData; // update active location
+
     try {
       const resp = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`);
       const data = await resp.json();
@@ -799,7 +807,7 @@ _start:
 
   // --- OPEN PHOTO GALLERY MODAL ---
   function openPhotoGallery() {
-    const p = PRESETS[activePreset] || PRESETS[1];
+    const p = activeLocationData || PRESETS[1];
     const modal = document.getElementById('gallery-modal');
     if (!modal) return;
 
@@ -910,6 +918,7 @@ _start:
     }
   }
 
+  // Compiling Simulation inside Terminal
   function runTerminalCode() {
     const langObj = CYBER_LANGS.find(l => l.id === activeCyberLang);
     if (!langObj) return;
@@ -1173,7 +1182,7 @@ _start:
   if (btnSV) {
     btnSV.addEventListener('click', () => {
       playSound('click');
-      const p = PRESETS[activePreset] || PRESETS[1];
+      const p = activeLocationData || PRESETS[1];
       const directUrl = p.streetviewUrl || `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${p.lat},${p.lng}`;
       window.open(directUrl, '_blank');
     });
