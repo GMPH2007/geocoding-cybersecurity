@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
       lat: -5.0848,
       lng: -81.1132,
       image: './assets/paita.jpg',
-      streetviewUrl: 'https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=-5.0848,-81.1132',
+      streetviewUrl: 'https://maps.google.com/?q=&cbll=-5.0848,-81.1132&layer=c',
       gallery: [
         { src: './assets/paita.jpg', caption: 'Plaza de Armas de Paita, Piura - Vista Principal' },
         { src: './assets/paita_mototaxi.jpg', caption: 'Plaza de Armas de Paita, Mototaxis y Parque Central' },
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
       lat: -5.0895,
       lng: -81.1042,
       image: './assets/carcamo.jpg',
-      streetviewUrl: 'https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=-5.0895,-81.1042',
+      streetviewUrl: 'https://maps.google.com/?q=&cbll=-5.0895,-81.1042&layer=c',
       gallery: [
         { src: './assets/carcamo.jpg', caption: 'Campus Principal IESTP Hermanos Cárcamo Paita' },
         { src: './assets/carcamo_front.jpg', caption: 'Frontis Oficial del Instituto - IESTP Hermanos Cárcamo' },
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
       lat: -5.1945,
       lng: -80.6328,
       image: './assets/piura.jpg',
-      streetviewUrl: 'https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=-5.1945,-80.6328',
+      streetviewUrl: 'https://maps.google.com/?q=&cbll=-5.1945,-80.6328&layer=c',
       gallery: [
         { src: './assets/piura.jpg', caption: 'Óvalo Grau, Piura - Punto GPS detectado por Smartphone' }
       ],
@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
       lat: -12.1217,
       lng: -77.0305,
       image: './assets/lima_costa_verde.jpg',
-      streetviewUrl: 'https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=-12.1217,-77.0305',
+      streetviewUrl: 'https://maps.google.com/?q=&cbll=-12.1217,-77.0305&layer=c',
       gallery: [
         { src: './assets/lima_costa_verde.jpg', caption: 'Costa Verde y Parapente sobre el Mar de Miraflores, Lima' },
         { src: './assets/lima.jpg', caption: 'Parque Kennedy en Miraflores, Lima' }
@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
       lat: -12.0517,
       lng: -77.0347,
       image: './assets/lima_san_martin.jpg',
-      streetviewUrl: 'https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=-12.0517,-77.0347',
+      streetviewUrl: 'https://maps.google.com/?q=&cbll=-12.0517,-77.0347&layer=c',
       gallery: [
         { src: './assets/lima_san_martin.jpg', caption: 'Plaza San Martín de Noche, Centro Histórico de Lima' },
         { src: './assets/lima_night.jpg', caption: 'Vista Nocturna de la Ciudad de Lima' }
@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
       lat: -12.0531,
       lng: -77.0371,
       image: './assets/lima_iglesia.jpg',
-      streetviewUrl: 'https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=-12.0531,-77.0371',
+      streetviewUrl: 'https://maps.google.com/?q=&cbll=-12.0531,-77.0371&layer=c',
       gallery: [
         { src: './assets/lima_iglesia.jpg', caption: 'Iglesia Colonial de la Recoleta, Plaza Francia, Lima' }
       ],
@@ -635,6 +635,9 @@ _start:
         pipelineTag.textContent = 'Completado';
       }
 
+      // Update active Location data ONLY when pipeline completes to ensure resolved values
+      activeLocationData = pipelineData;
+
       // Update HUD Coordinates
       const hud = document.getElementById('hud-latlng');
       if (hud) hud.textContent = `LAT: ${pipelineData.lat.toFixed(4)}° | LNG: ${pipelineData.lng.toFixed(4)}°`;
@@ -682,9 +685,6 @@ _start:
     const p = PRESETS[presetId];
     if (!p) return;
 
-    // Track active location data dynamically
-    activeLocationData = p;
-
     // Highlight Preset Card
     document.querySelectorAll('.preset-card').forEach(c => c.classList.remove('active'));
     const activeCard = document.querySelector(`.preset-card[data-preset="${presetId}"]`);
@@ -728,14 +728,12 @@ _start:
       title: 'Coordenada Geocodificada',
       subtitle: `Lat: ${lat.toFixed(4)}°, Lng: ${lng.toFixed(4)}°`,
       image: './assets/paita.jpg',
-      streetviewUrl: `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${lat},${lng}`,
+      streetviewUrl: `https://maps.google.com/?q=&cbll=${lat},${lng}&layer=c`,
       gallery: [{ src: './assets/paita.jpg', caption: 'Punto de Coordenada Geocodificada en Perú' }],
       score: '96.5%',
       time: '115 ms',
       note: 'Geocodificación Inversa: Convierte el punto GPS en el espacio digital en una ubicación geográfica.'
     };
-
-    activeLocationData = pipelineData; // update active location
 
     try {
       const resp = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`);
@@ -779,14 +777,12 @@ _start:
       title: query,
       subtitle: 'Búsqueda en Base de Datos Espacial',
       image: './assets/paita.jpg',
-      streetviewUrl: 'https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=-5.0848,-81.1132',
+      streetviewUrl: 'https://maps.google.com/?q=&cbll=-5.0848,-81.1132&layer=c',
       gallery: [{ src: './assets/paita.jpg', caption: query }],
       score: '98.9%',
       time: '110 ms',
       note: 'Geocodificación Directa: Transforma el texto ingresado en coordenadas geográficas numéricas.'
     };
-
-    activeLocationData = pipelineData; // update active location
 
     try {
       const resp = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`);
@@ -796,7 +792,7 @@ _start:
         pipelineData.lng = parseFloat(data[0].lon);
         pipelineData.subtitle = data[0].display_name;
         pipelineData.score = '99.4%';
-        pipelineData.streetviewUrl = `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${data[0].lat},${data[0].lon}`;
+        pipelineData.streetviewUrl = `https://maps.google.com/?q=&cbll=${data[0].lat},${data[0].lon}&layer=c`;
       }
     } catch (e) {
       console.warn('Geocoding search API error fallback', e);
@@ -1183,7 +1179,7 @@ _start:
     btnSV.addEventListener('click', () => {
       playSound('click');
       const p = activeLocationData || PRESETS[1];
-      const directUrl = p.streetviewUrl || `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${p.lat},${p.lng}`;
+      const directUrl = p.streetviewUrl || `https://maps.google.com/?q=&cbll=${p.lat},${p.lng}&layer=c`;
       window.open(directUrl, '_blank');
     });
   }
