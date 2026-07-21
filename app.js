@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
       id: 'python',
       name: '1. Python',
       ext: 'py',
-      diff: 1, // 1: Fácil, 2: Medio, 3: Difícil
+      diff: 1,
       category: 'Scripting & Automatización',
       desc: 'El rey indiscutible de la ciberseguridad. Su sintaxis simple lo hace ideal para escribir scripts de escaneo de red, scripts de reconocimiento, análisis de logs y exploits rápidos.',
       snippet: `# Script Port Scanner en Python
@@ -264,12 +264,11 @@ _start:
   ];
 
   // --- STATE MANAGEMENT ---
-  let activeModule = 'geo'; // 'geo' = Geocoding, 'cyber' = Cybersecurity
+  let activeModule = 'geo';
   let activeView = '2d';
   let activeType = 'direct';
   let activePreset = 1;
   let activeCyberLang = 'python';
-  let isAutoRotating = true;
   let soundEnabled = true;
   let isSimulating = false;
   let pipelineTimers = [];
@@ -886,6 +885,7 @@ _start:
   }
 
   function loadLanguageToTerminal(lang) {
+    if (!lang) return;
     const titleTag = document.getElementById('terminal-lang-tag');
     const termBody = document.getElementById('hacker-terminal-body');
     if (titleTag) titleTag.textContent = `${lang.name.substring(3)} Console`;
@@ -924,6 +924,7 @@ _start:
 
   // HTML escape helper
   function escapeHtml(text) {
+    if (!text) return '';
     return text
       .replace(/&/g, "&amp;")
       .replace(/</g, "&lt;")
@@ -1011,9 +1012,17 @@ _start:
     }
   }
 
+  // Clean mathematical ROT13 shifter
   function rot13(str) {
+    if (!str) return '';
     return str.replace(/[a-zA-Z]/g, function(c) {
-      return String.fromCharCode((c <= "Z" ? 90 : 122) >= (c = c.charCodeAt(0) + 13) ? c : c - 26);
+      const code = c.charCodeAt(0);
+      if (code >= 65 && code <= 90) {
+        return String.fromCharCode(((code - 65 + 13) % 26) + 65);
+      } else if (code >= 97 && code <= 122) {
+        return String.fromCharCode(((code - 97 + 13) % 26) + 97);
+      }
+      return c;
     });
   }
 
@@ -1230,7 +1239,25 @@ _start:
       const output = document.getElementById('cyber-code-output');
       if (output && output.value.trim()) {
         playSound('click');
-        navigator.clipboard.writeText(output.value);
+        const text = output.value;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text);
+        } else {
+          // Fallback selection copy for file:/// protocol
+          const textarea = document.createElement('textarea');
+          textarea.value = text;
+          textarea.style.position = 'fixed';
+          document.body.appendChild(textarea);
+          textarea.focus();
+          textarea.select();
+          try {
+            document.execCommand('copy');
+          } catch (err) {
+            console.warn('Fallback copy failed', err);
+          }
+          document.body.removeChild(textarea);
+        }
+        
         btnCopy.innerHTML = `<i class="fa-solid fa-check text-green"></i> Copiado!`;
         setTimeout(() => {
           btnCopy.innerHTML = `<i class="fa-solid fa-copy"></i> Copiar`;
