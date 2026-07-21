@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
       lat: -5.0848,
       lng: -81.1132,
       image: './assets/paita.jpg',
-      streetviewUrl: 'https://maps.google.com/maps?q=&layer=c&cbll=-5.0848,-81.1132&cbp=11,0,0,0,0&output=embed',
+      streetviewUrl: 'https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=-5.0848,-81.1132',
       gallery: [
         { src: './assets/paita.jpg', caption: 'Plaza de Armas de Paita, Piura - Vista Principal' },
         { src: './assets/paita_mototaxi.jpg', caption: 'Plaza de Armas de Paita, Mototaxis y Parque Central' },
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
       lat: -5.0895,
       lng: -81.1042,
       image: './assets/carcamo.jpg',
-      streetviewUrl: 'https://maps.google.com/maps?q=&layer=c&cbll=-5.0895,-81.1042&cbp=11,0,0,0,0&output=embed',
+      streetviewUrl: 'https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=-5.0895,-81.1042',
       gallery: [
         { src: './assets/carcamo.jpg', caption: 'Campus Principal IESTP Hermanos Cárcamo Paita' },
         { src: './assets/carcamo_front.jpg', caption: 'Frontis Oficial del Instituto - IESTP Hermanos Cárcamo' },
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
       lat: -5.1945,
       lng: -80.6328,
       image: './assets/piura.jpg',
-      streetviewUrl: 'https://maps.google.com/maps?q=&layer=c&cbll=-5.1945,-80.6328&cbp=11,0,0,0,0&output=embed',
+      streetviewUrl: 'https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=-5.1945,-80.6328',
       gallery: [
         { src: './assets/piura.jpg', caption: 'Óvalo Grau, Piura - Punto GPS detectado por Smartphone' }
       ],
@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
       lat: -12.1217,
       lng: -77.0305,
       image: './assets/lima_costa_verde.jpg',
-      streetviewUrl: 'https://maps.google.com/maps?q=&layer=c&cbll=-12.1217,-77.0305&cbp=11,0,0,0,0&output=embed',
+      streetviewUrl: 'https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=-12.1217,-77.0305',
       gallery: [
         { src: './assets/lima_costa_verde.jpg', caption: 'Costa Verde y Parapente sobre el Mar de Miraflores, Lima' },
         { src: './assets/lima.jpg', caption: 'Parque Kennedy en Miraflores, Lima' }
@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
       lat: -12.0517,
       lng: -77.0347,
       image: './assets/lima_san_martin.jpg',
-      streetviewUrl: 'https://maps.google.com/maps?q=&layer=c&cbll=-12.0517,-77.0347&cbp=11,0,0,0,0&output=embed',
+      streetviewUrl: 'https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=-12.0517,-77.0347',
       gallery: [
         { src: './assets/lima_san_martin.jpg', caption: 'Plaza San Martín de Noche, Centro Histórico de Lima' },
         { src: './assets/lima_night.jpg', caption: 'Vista Nocturna de la Ciudad de Lima' }
@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
       lat: -12.0531,
       lng: -77.0371,
       image: './assets/lima_iglesia.jpg',
-      streetviewUrl: 'https://maps.google.com/maps?q=&layer=c&cbll=-12.0531,-77.0371&cbp=11,0,0,0,0&output=embed',
+      streetviewUrl: 'https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=-12.0531,-77.0371',
       gallery: [
         { src: './assets/lima_iglesia.jpg', caption: 'Iglesia Colonial de la Recoleta, Plaza Francia, Lima' }
       ],
@@ -724,7 +724,7 @@ _start:
       title: 'Coordenada Geocodificada',
       subtitle: `Lat: ${lat.toFixed(4)}°, Lng: ${lng.toFixed(4)}°`,
       image: './assets/paita.jpg',
-      streetviewUrl: `https://maps.google.com/maps?q=&layer=c&cbll=${lat},${lng}&cbp=11,0,0,0,0&output=embed`,
+      streetviewUrl: `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${lat},${lng}`,
       gallery: [{ src: './assets/paita.jpg', caption: 'Punto de Coordenada Geocodificada en Perú' }],
       score: '96.5%',
       time: '115 ms',
@@ -773,7 +773,7 @@ _start:
       title: query,
       subtitle: 'Búsqueda en Base de Datos Espacial',
       image: './assets/paita.jpg',
-      streetviewUrl: 'https://maps.google.com/maps?q=&layer=c&cbll=-5.0848,-81.1132&cbp=11,0,0,0,0&output=embed',
+      streetviewUrl: 'https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=-5.0848,-81.1132',
       gallery: [{ src: './assets/paita.jpg', caption: query }],
       score: '98.9%',
       time: '110 ms',
@@ -788,7 +788,7 @@ _start:
         pipelineData.lng = parseFloat(data[0].lon);
         pipelineData.subtitle = data[0].display_name;
         pipelineData.score = '99.4%';
-        pipelineData.streetviewUrl = `https://maps.google.com/maps?q=&layer=c&cbll=${data[0].lat},${data[0].lon}&cbp=11,0,0,0,0&output=embed`;
+        pipelineData.streetviewUrl = `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${data[0].lat},${data[0].lon}`;
       }
     } catch (e) {
       console.warn('Geocoding search API error fallback', e);
@@ -1168,38 +1168,14 @@ _start:
     });
   }
 
-  // Open Street View 360 Button Click inside Card
+  // Open Street View 360 - Directly opens Google Maps in a new tab!
   const btnSV = document.getElementById('btn-open-streetview');
-  const svModal = document.getElementById('streetview-modal');
-  const svIframe = document.getElementById('streetview-iframe');
-  const svTitle = document.getElementById('streetview-modal-title');
-  const btnCloseSV = document.getElementById('btn-close-streetview');
-
-  if (btnSV && svModal && svIframe) {
+  if (btnSV) {
     btnSV.addEventListener('click', () => {
       playSound('click');
       const p = PRESETS[activePreset] || PRESETS[1];
-      if (svTitle) {
-        svTitle.innerHTML = `<i class="fa-solid fa-street-view text-cyan"></i> Vista 360° Interactiva: ${p.title}`;
-      }
-      svIframe.src = p.streetviewUrl || `https://maps.google.com/maps?q=&layer=c&cbll=${p.lat},${p.lng}&cbp=11,0,0,0,0&output=embed`;
-      svModal.classList.remove('hidden');
-    });
-  }
-
-  if (btnCloseSV && svModal && svIframe) {
-    btnCloseSV.addEventListener('click', () => {
-      svModal.classList.add('hidden');
-      svIframe.src = ''; // Clear source to stop network overhead
-    });
-  }
-
-  if (svModal && svIframe) {
-    svModal.addEventListener('click', (e) => {
-      if (e.target === svModal) {
-        svModal.classList.add('hidden');
-        svIframe.src = '';
-      }
+      const directUrl = p.streetviewUrl || `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${p.lat},${p.lng}`;
+      window.open(directUrl, '_blank');
     });
   }
 
@@ -1266,10 +1242,6 @@ _start:
     if (e.key === 'Escape') {
       if (modal) modal.classList.add('hidden');
       if (galleryModal) galleryModal.classList.add('hidden');
-      if (svModal) {
-        svModal.classList.add('hidden');
-        svIframe.src = '';
-      }
     }
   });
 
